@@ -30,3 +30,5 @@ Usage:
 14. Scroll down until you find the references that start with "Microsoft Outlook". Check each of these references. This is so the VBA code will be able to access your Outlook session.
 15. Press "Ok" when completed. Step 12, 13, and 14 have to be completed for each new excel file that needs the receipt parser macro.
 16. Done! All of the macros should be able to be used to their full extent!
+
+newCCBReport.txt - Taking a summary sheet named "Sheet1" of the analytes, creates a new full CCB report with each of the analytes and run results. Cleans up the sheets and makes it presentable, as well as highlighting errors, such as as duplicate Sample IDs and values above a certain threshold. *Note: newCCBReport macro is not yet built into the .xlam file above.*
