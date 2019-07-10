@@ -1,0 +1,77 @@
+Sub BQCExtraction1036()
+    'Declare variables for the BQC sheet
+    Dim wks As Worksheet
+    Set wks = ActiveWorkbook.Sheets("BQC Data_Hormones")
+    Dim col As Integer
+    col = 1
+    Dim row As Integer
+    row = 1
+    
+    'Source is the 9th sheet, which is the original extract sheet.
+    'This is because working within one workbook is much easier than continuosly referencing multiple
+    'instances of Excel
+    Set Source = ActiveWorkbook.Sheets("Source")
+    Dim EndRw As Integer, i As Integer
+    EndRw = Source.Range("L65500").End(xlUp).row
+    wks.Cells(1, 151).Value = EndRw
+    Dim hsp As String
+    hsp = Source.Cells(2, 36).Value
+    Dim conc As String
+    
+    'rng is used to determine the right column to put value in
+    Dim rng As Range: Set rng = wks.Range("F3:AB3")
+    Dim cel As Range
+    'rng2 is used to determine the right row to put value in
+    Dim rng2 As Range: Set rng2 = wks.Range("B2:B200")
+    Dim cel2 As Range
+    Dim search As String
+    
+    Dim currentRow As Integer
+    Dim currentRowValue As String
+    Dim endSec As Integer
+    
+    
+    For i = 2 To EndRw
+        conc = Source.Cells(i, 12).Value
+        search = CStr(Source.Cells(i, 8).Value)
+         'Search the title column for the first instance of the analyte name
+        For Each cel In rng.Cells
+            'If the cell is a hit
+            If InStr(1, cel.Value, search, vbTextCompare) > 0 Then
+                'Record the value of the correct column.
+                'The high and low columns will be col and col+1 respectively
+                col = cel.Column
+                
+               Exit For
+            End If
+        Next
+        
+        For Each cel2 In rng2.Cells
+            If InStr(1, cel2.Value, hsp, vbTextCompare) > 0 Then
+                row = cel2.row
+                currentRow = row - 1
+                endSec = row + 4
+                
+                'find the next empty cell
+                For currentRow = row - 1 To endSec
+                    currentRowValue = Cells(currentRow, col).Value
+                    If IsEmpty(currentRowValue) Or currentRowValue = "" Then
+                        row = currentRow
+                        Exit For
+                    End If
+                Next
+                    
+
+                Exit For
+            End If
+        Next cel2
+        
+        wks.Cells(row, col).Value = conc
+        'MsgBox ("col = " & col & ", row = " & row & ", conc = " & conc)
+    Next
+        
+    
+    
+    
+    
+End Sub
