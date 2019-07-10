@@ -32,3 +32,9 @@ Usage:
 16. Done! All of the macros should be able to be used to their full extent!
 
 newCCBReport.txt - Taking a summary sheet named "Sheet1" of the analytes, creates a new full CCB report with each of the analytes and run results. Cleans up the sheets and makes it presentable, as well as highlighting errors, such as as duplicate Sample IDs and values above a certain threshold. *Note: newCCBReport macro is not yet built into the .xlam file above.*
+
+blindQCMacro.txt - Copies STARLIMS analyte data into the BQC Hormone Sheet. Correct placement into rows is determined by HSP and Analyte Name. *Note: blindQCMacro has not yet been built into the .xlam file above.*
+Usage:
+1. Copy the data from the STARLIMS raw output into a new sheet at the end of the excel file.
+2. Name this sheet "Source".
+3. Run the Macro
