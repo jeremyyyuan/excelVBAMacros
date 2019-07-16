@@ -4,6 +4,7 @@ Sub CCB_Report_NEW()
 
 Dim analytes As Collection
 Dim wks As Worksheet
+Dim wks2 As Worksheet
 Dim i As Integer
 Dim rng As Range
 
@@ -16,6 +17,11 @@ If wks.name <> "Sheet1" Then
     MsgBox "Please run this macro from the 'Sheet1' tab"
     Exit Sub
 End If
+
+ArialNarrow10
+fitColumns
+sortSmalltoLarge
+formatDate
 
 'find the unique analyte names in column B
 Set analytes = GetUniqueValues(wks.Range("B2:B" & wks.Range("B100000").End(xlUp).Row))
@@ -38,17 +44,17 @@ For i = 1 To analytes.Count
     'Debug.Print analytes(i)
 Next i
 
-Dim wksCount As Integer
-
-For Each wks In Worksheets
+For Each wks2 In ThisWorkbook.Worksheets
+    wks2.Activate
     ArialNarrow10
     fitColumns
     sortSmalltoLarge
     formatDate
-    highlightDupIDs
+    Dups
     highlightRed
-
 Next
+
+wks.Activate
 
 Selection.AutoFilter
 Application.CutCopyMode = False
@@ -81,8 +87,8 @@ Function ArialNarrow10()
     Dim wks As Worksheet
     Set wks = ActiveWorkbook.ActiveSheet
     
-    ActiveSheet.Cells.Font.name = "Arial Narrow"
-    ActiveSheet.Cells.Font.Size = 10
+    wks.Cells.Font.name = "Arial Narrow"
+    wks.Cells.Font.Size = 10
     
 End Function
 
@@ -203,3 +209,25 @@ Function highlightRed()
     
 End Function
 
+Function Dups()
+
+    Dim myDataRng As Range
+    Dim cell As Range
+    Dim wks As Worksheet
+    Set wks = ActiveWorkbook.ActiveSheet
+     
+    ' WE WILL SET THE RANGE (first COLUMN).
+    Set myDataRng = wks.Range("A1:A" & Cells(Rows.Count, "A").End(xlUp).Row)
+     
+    For Each cell In myDataRng
+        cell.Offset(0, 0).Font.Color = vbBlack          ' DEFAULT COLOR.
+    
+        ' LOCATE DUPLICATE VALUE(S) IN THE SPECIFIED.
+        If Application.Evaluate("COUNTIF(" & myDataRng.Address & "," & cell.Address & ")") > 1 Then
+            cell.Offset(0, 0).Interior.Color = vbRed        ' CHANGE COLOR TO RED.
+        End If
+    Next cell
+     
+    Set myDataRng = Nothing
+    
+End Function
